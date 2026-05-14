@@ -1,0 +1,114 @@
+<Window x:Class="StudentCounseling.Views.CounselingEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding WindowTitle}"
+        Height="780" Width="640"
+        WindowStartupLocation="CenterOwner"
+        Background="White" ResizeMode="CanResize" FontSize="13">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="220"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT: form -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="상담 유형" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <ComboBox Grid.Row="1" ItemsSource="{Binding Types}" SelectedItem="{Binding Type}" Padding="8,6" Margin="0,0,0,10"/>
+
+            <TextBlock Grid.Row="2" Text="집단명" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"
+                       Visibility="{Binding IsGroup, Converter={StaticResource BoolToVis}}"/>
+            <TextBox Grid.Row="3" Style="{StaticResource InputBox}" Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"
+                     Visibility="{Binding IsGroup, Converter={StaticResource BoolToVis}}"/>
+
+            <TextBlock Grid.Row="4" Text="세부 카테고리" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <ComboBox Grid.Row="5" ItemsSource="{Binding SubCategoriesView}" SelectedItem="{Binding SubCategory}" Padding="8,6" Margin="0,0,0,10"/>
+
+            <TextBlock Grid.Row="6" Text="상담 방법" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <ComboBox Grid.Row="7" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}" Padding="8,6" Margin="0,0,0,10"/>
+
+            <TextBlock Grid.Row="8" Text="날짜 / 시작~종료" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <Grid Grid.Row="9" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <DatePicker Grid.Column="0" SelectedDate="{Binding Date}"/>
+                <TextBox Grid.Column="2" Style="{StaticResource InputBox}" Text="{Binding StartTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="4" Style="{StaticResource InputBox}" Text="{Binding EndTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="6" Text="{Binding DurationLabel}" VerticalAlignment="Center"
+                           Foreground="{StaticResource SubtleTextBrush}" FontSize="11"/>
+            </Grid>
+
+            <TextBlock Grid.Row="10" Text="다음 상담 예약 (선택)" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <DatePicker Grid.Row="11" SelectedDate="{Binding NextDate}" VerticalAlignment="Top" Margin="0,0,0,10"/>
+
+            <TextBlock Grid.Row="12" Text="상담 내용" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <TextBox Grid.Row="13" Style="{StaticResource InputBox}"
+                     Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                     MinHeight="140" Margin="0,0,0,10"/>
+
+            <StackPanel Grid.Row="14">
+                <TextBlock Text="후속 조치 (선택)" Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox Style="{StaticResource InputBox}"
+                         Text="{Binding FollowUp, UpdateSourceTrigger=PropertyChanged}"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         MinHeight="56"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- RIGHT: student picker + actions -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="{Binding SingleSelectionHint}"
+                       Foreground="{StaticResource SubtleTextBrush}" FontSize="11" Margin="0,0,0,4"/>
+            <Border Grid.Row="1" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6">
+                <ListBox ItemsSource="{Binding StudentItems}" BorderThickness="0" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                      Content="{Binding Label}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Style="{StaticResource GhostButton}" Content="취소" Margin="0,0,8,0" IsCancel="True"/>
+                <Button x:Name="SaveBtn" Style="{StaticResource PrimaryButton}" Content="저장" IsDefault="True" Click="SaveBtn_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
