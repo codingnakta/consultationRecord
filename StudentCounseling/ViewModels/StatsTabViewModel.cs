@@ -109,7 +109,7 @@ public partial class StatsTabViewModel : ObservableObject
     public IEnumerable<Counseling> Filtered()
     {
         var (start, end) = GetRange();
-        return Main.Counselings.Where(c => c.Date >= start && c.Date <= end);
+        return Main.Counselings.Where(c => c.StudentIds.Count > 0 && c.Date >= start && c.Date <= end);
     }
 
     public void Recompute()

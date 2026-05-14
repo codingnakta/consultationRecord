@@ -294,11 +294,15 @@ public partial class CounselingTabViewModel : ObservableObject
             {
                 if (c.StudentIds.Remove(sid))
                 {
-                    if (c.StudentIds.Count == 0) orphaned++;
+                    if (c.StudentIds.Count == 0)
+                    {
+                        Main.Counselings.Remove(c);
+                        orphaned++;
+                    }
                 }
             }
             if (orphaned > 0)
-                Main.Dialog.Info($"학생 없는 상담 {orphaned}건이 생겼습니다. 통계 탭에서 확인 후 정리하세요.", "안내");
+                Main.Dialog.Info($"참여 학생이 없어진 상담 {orphaned}건을 함께 정리했습니다.", "안내");
         }
 
         Main.Students.Remove(toRemove);
